@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace GnuPlotSharp
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var assemblyFile = new FileInfo(Assembly.GetExecutingAssembly().Location);
             var path = Path.Combine(assemblyFile.Directory.FullName, "gnuplot.exe");
@@ -57,9 +57,9 @@ plot [0.0:0.5] [2:6] ""{dataFile}"" with lines   title ""Hello World!!!""
             {
                 throw new Exception("nonzero exit code");
             }
-            Process.Start(outputfile);
+            //Process.Start(outputfile);
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }

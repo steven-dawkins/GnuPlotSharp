@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnuPlotSharp", "GnuPlotSharp\GnuPlotSharp.csproj", "{0112D03D-204F-495F-9E66-EB9EA8DBE416}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnuPlotSharp.Tests", "GnuPlotSharp.Tests\GnuPlotSharp.Tests.csproj", "{1F4E0E1C-9CED-462C-B84E-D75151D6322F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0112D03D-204F-495F-9E66-EB9EA8DBE416}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0112D03D-204F-495F-9E66-EB9EA8DBE416}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0112D03D-204F-495F-9E66-EB9EA8DBE416}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F4E0E1C-9CED-462C-B84E-D75151D6322F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F4E0E1C-9CED-462C-B84E-D75151D6322F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F4E0E1C-9CED-462C-B84E-D75151D6322F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F4E0E1C-9CED-462C-B84E-D75151D6322F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
