@@ -23,12 +23,12 @@ namespace GnuPlotSharp
             }
 
             var scriptFile = @"c:\temp\plt.txt";
-            var dataFile = @"c:\temp\plt.dat";
+            var dataFile = @"c:/temp/plt.dat";
             var outputfile = "c:/temp/printme3.png";
             var scriptContent = 
 $@"set term png
 set output ""{outputfile}""
-plot sin(x) * x - 10
+plot [0.0:0.5] [2:6] ""{dataFile}"" with lines   title ""Hello World!!!""
 ";
 
             var data = @"
@@ -37,13 +37,29 @@ plot sin(x) * x - 10
 0.3 3
 0.4 4
 ";
+            Console.WriteLine(scriptContent);
             File.WriteAllText(dataFile, data);
 
             File.WriteAllText(scriptFile, scriptContent);
 
-            Process.Start(path, @"-c " + scriptFile);
+            var p = new Process();
+            p.StartInfo.FileName = path;
+            p.StartInfo.Arguments = @"-c " + scriptFile;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
 
-            Process.Start(outputfile);            
+            Console.WriteLine(p.StandardOutput.ReadToEnd());
+            Console.WriteLine(p.StandardError.ReadToEnd());
+            p.WaitForExit();
+            if (p.ExitCode != 0)
+            {
+                throw new Exception("nonzero exit code");
+            }
+            Process.Start(outputfile);
+
+            Console.ReadLine();
         }
     }
 }
