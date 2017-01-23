@@ -14,7 +14,7 @@ namespace GnuPlotSharp
         public static void Main(string[] args)
         {
             var assemblyFile = new FileInfo(Assembly.GetExecutingAssembly().Location);
-            var path = Path.Combine(assemblyFile.Directory.FullName, "gnuplot.exe");
+            var path = Path.Combine(assemblyFile.Directory.FullName, "gnuplot", "gnuplot.exe");
 
             var fi = new FileInfo(path);
             if (!fi.Exists)
