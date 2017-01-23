@@ -12,8 +12,11 @@ namespace GnuPlotSharp.Tests
         [UseReporter(typeof(ImageReporter), typeof(ClipboardReporter))]
         public void TestMethod1()
         {
-            Program.Main(new string[] { });
-            Approvals.VerifyFile(@"c:\temp\printme3.png");
+            var outputfile = "c:/temp/printme4.png";
+
+            new GnuPlotScript("Hello World2!!!").Render(outputfile);
+            
+            Approvals.VerifyFile(outputfile);
         }
     }
 }

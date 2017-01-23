@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GnuPlotSharp
@@ -41,18 +42,24 @@ namespace GnuPlotSharp
 
     }
 
-
-    public class Program
+    public class GnuPlotScript
     {
-        public static void Main(string[] args)
-        {            
+        private readonly string title;
+
+        public GnuPlotScript(string title)
+        {
+            this.title = title;
+        }
+
+        public void Render(string outputfile)
+        {
             var scriptFile = Path.GetTempFileName() + ".txt";
-            var dataFile = Path.GetTempFileName() + "plt.dat";
-            var outputfile = "c:/temp/printme4.png";
-            var scriptContent = 
+            var dataFile = (Path.GetTempFileName() + "plt.dat").Replace("\\", "\\\\");
+
+            var scriptContent =
 $@"set term png
 set output ""{outputfile}""
-plot [0.0:0.5] [2:6] ""{dataFile}"" with lines   title ""Hello World!!!""
+plot [0.0:0.5] [2:6] ""{dataFile}"" with lines   title ""{title}""
 ";
 
             var data = @"
@@ -60,12 +67,25 @@ plot [0.0:0.5] [2:6] ""{dataFile}"" with lines   title ""Hello World!!!""
 0.2 4
 0.3 3
 0.4 4
-";            
-            File.WriteAllText(dataFile, data);        
+";
+
+            File.WriteAllText(dataFile, data);
             File.WriteAllText(scriptFile, scriptContent);
 
             var arguments = @"-c " + scriptFile;
-            
+
+            new GnuPlotLauncher().Launch(arguments);
+        }
+    }
+
+    internal class Program
+    {
+        internal static void Main(string[] args)
+        {                        
+            var outputfile = "c:/temp/printme4.png";
+
+            new GnuPlotScript("Hello World2!!!").Render(outputfile);            
+
             Process.Start(outputfile);
 
             //Console.ReadLine();
