@@ -15,4 +15,7 @@
     <copyright>Copyright 2017</copyright>
     <tags>gnuplot</tags>
   </metadata>
+  <files>
+	  <file src="bin\Debug\gnuplot\*.*" target="lib" /> 
+	</files>
 </package>
