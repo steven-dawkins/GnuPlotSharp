@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using System.IO;
 
 namespace GnuPlotSharp.Tests
 {
@@ -12,9 +13,9 @@ namespace GnuPlotSharp.Tests
         [UseReporter(typeof(ImageReporter), typeof(ClipboardReporter))]
         public void TestMethod1()
         {
-            var outputfile = "c:/temp/printme4.png";
+            var outputfile = Path.Combine(Path.GetTempFileName() + ".png").Replace("\\", "/");
 
-            new GnuPlotScript("Hello World2!!!").Render(outputfile);
+            new GnuPlotScript("Hello World!!!").Render(outputfile);
             
             Approvals.VerifyFile(outputfile);
         }
