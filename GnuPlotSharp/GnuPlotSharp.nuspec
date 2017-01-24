@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>sdawkins@oxfordeconomics.com</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/steven-dawkins/GnuPlotSharp/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/steven-dawkins/GnuPlotSharp</projectUrl>
+    <iconUrl>http://www.gnuplot.info/figs/gaussians.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>.Net wrapper for gnuplot</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>gnuplot</tags>
+  </metadata>
+</package>
