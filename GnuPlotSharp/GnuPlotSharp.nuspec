@@ -5,7 +5,7 @@
     <version>$version$</version>
     <title>$title$</title>
     <authors>sdawkins@oxfordeconomics.com</authors>
-    <owners>$author$</owners>
+    <owners>sdawkins@oxfordeconomics.com</owners>
     <licenseUrl>https://github.com/steven-dawkins/GnuPlotSharp/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/steven-dawkins/GnuPlotSharp</projectUrl>
     <iconUrl>http://www.gnuplot.info/figs/gaussians.png</iconUrl>
@@ -16,6 +16,6 @@
     <tags>gnuplot</tags>
   </metadata>
   <files>
-	  <file src="bin\Debug\gnuplot\*.*" target="lib" /> 
+	  <file src="bin\Release\gnuplot\*.*" target="lib" /> 
 	</files>
 </package>
