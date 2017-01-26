@@ -16,6 +16,7 @@
     <tags>gnuplot</tags>
   </metadata>
   <files>
-	  <file src="bin\Release\gnuplot\*.*" target="lib" /> 
+	  <file src="bin\$Configuration$\gnuplot\*.*" target="build\gnuplot" /> 
+    <file src="bin\$Configuration$\GnuPlotSharp.targets" target="build\GnuPlotSharp.targets" /> 
 	</files>
 </package>
