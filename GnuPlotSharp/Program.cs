@@ -60,6 +60,21 @@ namespace GnuPlotSharp
         }
     }
 
+    public class RenderResults
+    {
+        public readonly string DataFile;
+        public readonly string Outputfile;
+        public readonly string ScriptFile;
+
+        public RenderResults(string scriptFile, string dataFile, string outputfile)
+        {
+            this.ScriptFile = scriptFile;
+            this.DataFile = dataFile;
+            this.Outputfile = outputfile;
+        }
+    }
+
+
     public class GnuPlotScript
     {
         private readonly string title;
@@ -78,7 +93,7 @@ namespace GnuPlotSharp
             return outputfile;
         }
 
-        public void Render<T1, T2>(string outputfile, Row<T1, T2> row)
+        public RenderResults Render<T1, T2>(string outputfile, Row<T1, T2> row)
         {
             var scriptFile = Path.GetTempFileName() + ".txt";
             var dataFile = (Path.GetTempFileName() + "plt.dat");
@@ -105,6 +120,8 @@ set output ""{outputfile.Replace("\\", "/")}""
             var arguments = @"-c " + scriptFile;
 
             new GnuPlotLauncher().Launch(arguments);
+
+            return new RenderResults(scriptFile, dataFile, outputfile);
         }
     }
 
