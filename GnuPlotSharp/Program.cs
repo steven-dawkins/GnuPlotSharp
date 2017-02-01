@@ -90,7 +90,12 @@ set output ""{outputfile.Replace("\\", "/")}""
 
             // $@"plot [0.0:0.5] [2:6] ""{dataFile.Replace("\\", "\\\\")}"" with lines   title ""{title}""";
 
-            scriptContent += $@"plot ""{dataFile.Replace("\\", "\\\\")}"" with lines   title ""{row.Title}""";
+            var xmin = row.Data.Select(v => v.Key).Min();
+            var xmax = row.Data.Select(v => v.Key).Max();
+            var ymin = row.Data.Select(v => v.Value).Min();
+            var ymax = row.Data.Select(v => v.Value).Max();
+
+            scriptContent += $@"plot [{xmin}:{xmax}] [{ymin}:{ymax}] ""{dataFile.Replace("\\", "\\\\")}"" with lines   title ""{row.Title}""";
 
             var data = String.Join("\n", row.Data.Select(kv => $"{kv.Key}\t{kv.Value}"));                    
 
