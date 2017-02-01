@@ -62,14 +62,14 @@ namespace GnuPlotSharp
 
     public class RenderResults
     {
-        public readonly string DataFile;
+        public readonly string[] DataFiles;
         public readonly string Outputfile;
         public readonly string ScriptFile;
 
-        public RenderResults(string scriptFile, string dataFile, string outputfile)
+        public RenderResults(string scriptFile, string[] dataFiles, string outputfile)
         {
             this.ScriptFile = scriptFile;
-            this.DataFile = dataFile;
+            this.DataFiles = dataFiles;
             this.Outputfile = outputfile;
         }
     }
@@ -84,19 +84,16 @@ namespace GnuPlotSharp
             this.title = title;
         }        
 
-        public string Render<T1, T2>(Row<T1, T2> row)
+        public RenderResults Render<T1, T2>(Row<T1, T2> row)
         {
             var outputfile = Path.Combine(Path.GetTempFileName() + ".png");
 
-            Render(outputfile, row);
-
-            return outputfile;
+            return Render(outputfile, row);
         }
 
-        public RenderResults Render<T1, T2>(string outputfile, Row<T1, T2> row)
+        public RenderResults Render<T1, T2>(string outputfile, params Row<T1, T2> [] rows)
         {
-            var scriptFile = Path.GetTempFileName() + ".txt";
-            var dataFile = (Path.GetTempFileName() + "plt.dat");
+            var scriptFile = Path.GetTempFileName() + ".txt";            
 
             var scriptContent =
 $@"set term png
@@ -105,23 +102,31 @@ set output ""{outputfile.Replace("\\", "/")}""
 
             // $@"plot [0.0:0.5] [2:6] ""{dataFile.Replace("\\", "\\\\")}"" with lines   title ""{title}""";
 
-            var xmin = row.Data.Select(v => v.Key).Min();
-            var xmax = row.Data.Select(v => v.Key).Max();
-            var ymin = row.Data.Select(v => v.Value).Min();
-            var ymax = row.Data.Select(v => v.Value).Max();
+            var xmin = rows.SelectMany(r => r.Data).Select(v => v.Key).Min();
+            var xmax = rows.SelectMany(r => r.Data).Select(v => v.Key).Max();
+            var ymin = rows.SelectMany(r => r.Data).Select(v => v.Value).Min();
+            var ymax = rows.SelectMany(r => r.Data).Select(v => v.Value).Max();
 
-            scriptContent += $@"plot [{xmin}:{xmax}] [{ymin}:{ymax}] ""{dataFile.Replace("\\", "\\\\")}"" with lines   title ""{row.Title}""";
+            int i = 0;
+            List<string> datafiles = new List<string>();
+            foreach(var row in rows)
+            {
+                var data = String.Join("\n", row.Data.Select(kv => $"{kv.Key}\t{kv.Value}"));
+                
+                var dataFile = (Path.GetTempFileName() + $"plt_{i}.dat");
+                datafiles.Add(dataFile);
+                File.WriteAllText(dataFile, data);
 
-            var data = String.Join("\n", row.Data.Select(kv => $"{kv.Key}\t{kv.Value}"));                    
-
-            File.WriteAllText(dataFile, data);
+                scriptContent += $@"plot [{xmin}:{xmax}] [{ymin}:{ymax}] ""{dataFile.Replace("\\", "\\\\")}"" with lines   title ""{row.Title}""";
+            }
+                                    
             File.WriteAllText(scriptFile, scriptContent);
 
             var arguments = @"-c " + scriptFile;
 
             new GnuPlotLauncher().Launch(arguments);
 
-            return new RenderResults(scriptFile, dataFile, outputfile);
+            return new RenderResults(scriptFile, datafiles.ToArray(), outputfile);
         }
     }
 
