@@ -84,11 +84,11 @@ namespace GnuPlotSharp
             this.title = title;
         }        
 
-        public RenderResults Render<T1, T2>(Row<T1, T2> row)
+        public RenderResults Render<T1, T2>(params Row<T1, T2> [] rows)
         {
             var outputfile = Path.Combine(Path.GetTempFileName() + ".png");
 
-            return Render(outputfile, row);
+            return Render(outputfile, rows);
         }
 
         public RenderResults Render<T1, T2>(string outputfile, params Row<T1, T2> [] rows)
@@ -107,18 +107,14 @@ set output ""{outputfile.Replace("\\", "/")}""
             var ymin = rows.SelectMany(r => r.Data).Select(v => v.Value).Min();
             var ymax = rows.SelectMany(r => r.Data).Select(v => v.Value).Max();
 
-            int i = 0;
-            List<string> datafiles = new List<string>();
-            foreach(var row in rows)
-            {
-                var data = String.Join("\n", row.Data.Select(kv => $"{kv.Key}\t{kv.Value}"));
-                
-                var dataFile = (Path.GetTempFileName() + $"plt_{i}.dat");
-                datafiles.Add(dataFile);
-                File.WriteAllText(dataFile, data);
+            scriptContent += $@"plot [{xmin}:{xmax}] [{ymin}:{ymax}] ";
 
-                scriptContent += $@"plot [{xmin}:{xmax}] [{ymin}:{ymax}] ""{dataFile.Replace("\\", "\\\\")}"" with lines   title ""{row.Title}""";
-            }
+            var dataFiles = WriteData(rows).ToArray();
+
+            var plotBlocks = from dataFile in dataFiles
+                             select $@"""{dataFile.Item1.Replace("\\", "\\\\")}"" with lines   title ""{dataFile.Item2}""";
+
+            scriptContent += String.Join(", ", plotBlocks);          
                                     
             File.WriteAllText(scriptFile, scriptContent);
 
@@ -126,9 +122,24 @@ set output ""{outputfile.Replace("\\", "/")}""
 
             new GnuPlotLauncher().Launch(arguments);
 
-            return new RenderResults(scriptFile, datafiles.ToArray(), outputfile);
+            return new RenderResults(scriptFile, dataFiles.Select(d => d.Item1).ToArray(), outputfile);
+        }
+
+        private IEnumerable<Tuple<string, string>> WriteData<T1, T2>(Row<T1, T2>[] rows)
+        {
+            int i = 0;
+            foreach (var row in rows)
+            {
+                var data = String.Join("\n", row.Data.Select(kv => $"{kv.Key}\t{kv.Value}"));
+
+                var dataFile = (Path.GetTempFileName() + $"plt_{i}.dat");
+                File.WriteAllText(dataFile, data);
+
+                yield return new Tuple<string, string>(dataFile, row.Title);
+            }
         }
     }
+    
 
     internal class Program
     {
