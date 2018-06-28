@@ -111,7 +111,8 @@ set output ""{outputfile.Replace("\\", "/")}""
             if (rows.Any())
             {
                 // Generate IDs for the labels
-                var labels = rows[0].Data.Select(t => t.Key).ToList();
+                //var labels = rows[0].Data.Select(t => t.Key).ToList();
+                var labels = rows.SelectMany(t => t.Data).GroupBy(t => t.Key).Select(t => t.Key).ToList();
                 var label_ids = Enumerable.Range(0, labels.Count);
                 var paired_ids = labels.Zip(label_ids, (label, id) => $"\"{label}\" {id}");
                 var args = paired_ids.Aggregate((c, next) => c + "," + next);
@@ -128,7 +129,8 @@ set output ""{outputfile.Replace("\\", "/")}""
 
                 scriptContent += $@"plot [{xmin}:{xmax}] [{ymin}:{ymax}] ";
 
-                var new_rows = rows.Select(row => new Row<int, T2>(row.Title, label_ids.ToArray(), row.Data.Select(t => t.Value).ToArray())).ToArray();
+                // row.Data.Select(t => labels.IndexOf(t.Key)).ToArray(), row.Data.Select(t => t.Value).ToArray()
+                var new_rows = rows.Select(row => new Row<int, T2>(row.Title, row.Data.Select(t => new KeyValuePair<int, T2>(labels.IndexOf(t.Key), t.Value)).OrderBy(t => t.Key).ToArray())).ToArray();
 
                 var dataFiles = WriteData(new_rows).ToArray();
 
@@ -209,7 +211,7 @@ set output ""{outputfile.Replace("\\", "/")}""
         internal static void Main(string[] args)
         {
             var outputfile_strings = "printme4.png";
-            new GnuPlotScript("With string labels").Render(outputfile_strings, new Row<string, int>("With string labels", new[] { "a", "b", "c", "d" }, new[] { 5, 4, 3, 4 }));
+            new GnuPlotScript("With string labels").Render(outputfile_strings, new Row<string, int>("series 1", new[] { "a", "b", "c", "d" }, new[] { 5, 4, 3, 4 }), new Row<string, int>("series 2", new[] { "e", "b", "c", "d" }, new[] { 1, 5, 9, 2 }));
             Process.Start(outputfile_strings);
 
             var outputfile_nums = "printme5.png";
