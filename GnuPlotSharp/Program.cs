@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GnuPlotSharp
@@ -182,6 +184,7 @@ set output ""{outputfile.Replace("\\", "/")}""
 
         private IEnumerable<Tuple<string, string>> WriteData<T1, T2>(Row<T1, T2>[] rows)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en");
             int i = 0;
             foreach (var row in rows)
             {
