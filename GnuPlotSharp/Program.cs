@@ -92,11 +92,15 @@ namespace GnuPlotSharp
         {
             var outputfile = Path.Combine(Path.GetTempFileName() + ".png");
 
-            return Render(outputfile, rows);
+            if (rows is Row<string, T2>[] _rows)
+                return Render(outputfile, _rows);
+            else
+                return Render(outputfile, rows);
         }
 
         public RenderResults Render<T2>(string outputfile, params Row<string, T2>[] rows)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en");
             var scriptFile = Path.GetTempFileName() + ".txt";
 
             var scriptContent =
@@ -147,6 +151,8 @@ set output ""{outputfile.Replace("\\", "/")}""
 
         public RenderResults Render<T1, T2>(string outputfile, params Row<T1, T2>[] rows)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en");
+
             var scriptFile = Path.GetTempFileName() + ".txt";
 
             var scriptContent =
@@ -184,7 +190,6 @@ set output ""{outputfile.Replace("\\", "/")}""
 
         private IEnumerable<Tuple<string, string>> WriteData<T1, T2>(Row<T1, T2>[] rows)
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en");
             int i = 0;
             foreach (var row in rows)
             {
