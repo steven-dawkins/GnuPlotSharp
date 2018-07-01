@@ -8,6 +8,7 @@ build:
   verbosity: minimal
 
 
+for:
 -
   branches:
     only:
@@ -16,7 +17,7 @@ build:
   branches:
     only:
       - release
-    deploy:
+  deploy:
     - provider: NuGet
       api_key:
         secure: Z1DoV4FAaop88LOqNhOuUf+SUrJtH2toXU5Kx++tXpJLAYWluu4ppfdbF+SUT+7+
