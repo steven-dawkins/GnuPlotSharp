@@ -29,5 +29,14 @@ namespace GnuPlotSharp.Tests
 
             Approvals.VerifyFile(outputfile.Outputfile);
         }
+
+        [TestMethod]
+        [UseReporter(typeof(ImageReporter), typeof(ClipboardReporter))]
+        public void StringsOnXAxis()
+        {
+            var outputfile = new GnuPlotScript("With string labels").Render(new Row<string, int>("With string labels", new[] { "a", "b", "c", "d" }, new[] { 5, 4, 3, 4 }));
+
+            Approvals.VerifyFile(outputfile.Outputfile);
+        }
     }
 }
