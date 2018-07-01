@@ -211,11 +211,18 @@ set output ""{outputfile.Replace("\\", "/")}""
         internal static void Main(string[] args)
         {
             var outputfile_strings = "printme4.png";
-            new GnuPlotScript("With string labels").Render(outputfile_strings, new Row<string, int>("series 1", new[] { "a", "b", "c", "d" }, new[] { 5, 4, 3, 4 }), new Row<string, int>("series 2", new[] { "e", "b", "c", "d" }, new[] { 1, 5, 9, 2 }));
+            new GnuPlotScript("With string labels")
+                .Render(
+                    outputfile: outputfile_strings,
+                    new Row<string, int>("series 1", new[] { "a", "b", "c", "d" }, new[] { 5, 4, 3, 4 }), 
+                    new Row<string, int>("series 2", new[] { "e", "b", "c", "d" }, new[] { 1, 5, 9, 2 }));
+
             Process.Start(outputfile_strings);
 
             var outputfile_nums = "printme5.png";
-            new GnuPlotScript("pure numbers").Render(outputfile_nums, new Row<double, int>("pure numbers", new[] { 0.1, 0.2, 0.3, 0.4 }, new[] { 5, 4, 3, 4 }));
+            new GnuPlotScript("pure numbers").Render(
+                outputfile: outputfile_nums,
+                rows: new Row<double, int>("pure numbers", new[] { 0.1, 0.2, 0.3, 0.4 }, new[] { 5, 4, 3, 4 }));
             Process.Start(outputfile_nums);
 
             //Console.ReadLine();
