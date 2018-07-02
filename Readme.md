@@ -2,6 +2,11 @@
 
 Simple C# wrapper around gnuplot.
 
+## Installation
+```csharp
+PM> Install-Package GnuPlotSharp
+```
+
 ## Examples
 ```csharp
  new GnuPlotScript("With string labels")
